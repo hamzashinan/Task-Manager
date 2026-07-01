@@ -3,6 +3,7 @@ venv/
 **/.venv/
 backend/venv/
 backend/.venv/
+backend/.venv_run/
 node_modules/
 __pycache__/
 *.pyc
