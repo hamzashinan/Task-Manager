@@ -41,10 +41,12 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
 
-_allowed = os.getenv(
-    "ALLOWED_HOSTS",
-    "task-manager-rzjc.onrender.com,task-manager-lqmm.onrender.com,.onrender.com,127.0.0.1,localhost",
-)
+# Determine allowed hosts. If the environment variable is missing or empty, use a safe default list.
+_allowed_env = os.getenv("ALLOWED_HOSTS")
+if _allowed_env:
+    _allowed = _allowed_env
+else:
+    _allowed = "task-manager-rzjc.onrender.com,task-manager-lqmm.onrender.com,.onrender.com,127.0.0.1,localhost"
 ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
 
 

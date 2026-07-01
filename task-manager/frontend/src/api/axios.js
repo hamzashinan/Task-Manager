@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const apiHost = import.meta.env.DEV
-  ? "http://127.0.0.1:8000"
-  : import.meta.env.VITE_API_BASE_URL || "https://task-manager-lqmm.onrender.com";
+const apiHost =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://task-manager-rzjc.onrender.com";
 const baseURL = `${apiHost.replace(/\/$/, "")}/api/`;
 
 const api = axios.create({
@@ -44,9 +44,12 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           // Request new access token using refresh token
-         const response = await api.post("auth/refresh/", {
-  refresh: refreshToken,
-});
+        const response = await axios.post(
+  `${apiHost}/api/auth/refresh/`,
+  {
+    refresh: refreshToken,
+  }
+);
 
           const newAccessToken = response.data.access;
           localStorage.setItem("access", newAccessToken);

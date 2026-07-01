@@ -41,11 +41,10 @@ function Register() {
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.username?.[0] ||
-        err.response?.data?.email?.[0] ||
-        err.response?.data?.password?.[0] ||
-        "Registration failed. Please fill out the form correctly."
-      );
+  Object.values(err.response?.data || {})
+    .flat()
+    .join(" ") || "Registration failed"
+);
     } finally {
       setLoading(false);
     }
