@@ -2,6 +2,29 @@ from django.db import models
 from django.conf import settings
 
 
+
+class Project(models.Model):
+    owner = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE,
+    related_name="projects"
+   )
+
+    name = models.CharField(max_length=100)
+
+    description = models.TextField(blank=True)
+
+    color = models.CharField(
+        max_length=20,
+        default="#6366F1"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+
 class Task(models.Model):
     PRIORITY_CHOICES = (
         ("LOW", "Low"),
@@ -42,5 +65,10 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="tasks",
+    )

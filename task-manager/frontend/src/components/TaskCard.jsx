@@ -110,6 +110,13 @@ function TaskCard({
 
         {/* Task Title & Description */}
         <div className="space-y-1.5 text-left">
+          {/* Project badge */}
+          {task.project && (
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: task.project.color }}></span>
+              <span className="text-xs font-medium text-slate-300">{task.project.name}</span>
+            </div>
+          )}
           <h3 className={`text-base font-bold text-white tracking-tight ${task.status === "COMPLETED" ? "line-through text-slate-500" : ""}`}>
             {task.title}
           </h3>

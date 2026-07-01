@@ -10,6 +10,7 @@ function TaskForm({
   setEditingTask,
   fetchTasks,
 }) {
+  const [projects, setProjects] = useState([]);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -17,12 +18,23 @@ function TaskForm({
     status: "TODO",
     due_date: "",
     tags: "",
+    project: null,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // Sync editing task content
+  // Fetch projects for dropdown
+  useEffect(() => {
+    if (isOpen) {
+      api
+        .get("projects/")
+        .then((res) => setProjects(res.data))
+        .catch((err) => console.error("Error loading projects:", err));
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     if (editingTask) {
       setForm({
@@ -32,6 +44,7 @@ function TaskForm({
         status: editingTask.status || "TODO",
         due_date: editingTask.due_date || "",
         tags: editingTask.tags || "",
+        project: editingTask.project || null,
       });
     } else {
       // Reset form if not editing
@@ -42,6 +55,7 @@ function TaskForm({
         status: "TODO",
         due_date: "",
         tags: "",
+        project: null,
       });
     }
   }, [editingTask, isOpen]);
@@ -68,13 +82,14 @@ function TaskForm({
       
       // Reset and Close
       setForm({
-        title: "",
-        description: "",
-        priority: "MEDIUM",
-        status: "TODO",
-        due_date: "",
-        tags: "",
-      });
+      title: "",
+      description: "",
+      priority: "MEDIUM",
+      status: "TODO",
+      due_date: "",
+      tags: "",
+      project: null,
+    });
       if (onClose) onClose();
     } catch (err) {
       console.error("Task submission error:", err.response?.data || err.message);
@@ -209,6 +224,32 @@ function TaskForm({
               })}
             </div>
           </div>
+                       
+                 {/* Project */}
+<div className="space-y-1.5 text-left">
+  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+    Project
+  </label>
+
+  <select
+    value={form.project || ""}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        project: e.target.value ? Number(e.target.value) : null,
+      })
+    }
+    className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-200 text-sm font-medium"
+  >
+    <option value="">No Project</option>
+
+    {projects.map((project) => (
+      <option key={project.id} value={project.id}>
+        {project.name}
+      </option>
+    ))}
+  </select>
+</div>
 
           {/* Due Date & Tags Side by Side */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -230,6 +271,7 @@ function TaskForm({
               <label className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Tag size={13} /> Tags (comma-separated)
               </label>
+
               <input
                 type="text"
                 placeholder="e.g. Design, Frontend"

@@ -7,6 +7,8 @@ import StatsCard from "../components/StatsCard";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import TaskChart from "../components/TaskChart";
+import ProjectsPage from "../pages/ProjectsPage";
+import CalendarPage from "../pages/CalendarPage";
 
 import { Search, Plus, SlidersHorizontal, Grid, List, CheckSquare } from "lucide-react";
 
@@ -463,6 +465,16 @@ function Dashboard() {
 
             </div>
           </div>
+        )}
+
+       {activeTab === "projects" && (
+         <ProjectsPage />
+        )}
+
+        {activeTab === "calendar" && (
+          <CalendarPage
+            tasks={tasks}
+          />
         )}
 
       </main>
