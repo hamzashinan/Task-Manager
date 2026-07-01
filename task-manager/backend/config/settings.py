@@ -147,4 +147,6 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173",]
+CORS_ALLOWED_ORIGINS = [
+    "https://task-manager-self-alpha.vercel.app"
+]
