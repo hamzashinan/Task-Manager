@@ -149,11 +149,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "True").lower() in ("true", "1", "yes")
-CORS_ALLOWED_ORIGINS = os.getenv(
-    "CORS_ALLOWED_ORIGINS",
-    "https://task-manager-self-alpha.vercel.app,https://task-manager-lqmm.vercel.app"
-).split(",")
+CORS_ALLOW_ALL_ORIGINS = True
 
 from datetime import timedelta
 
@@ -169,6 +165,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
-CORS_ALLOWED_ORIGINS = [
-    "https://task-manager-self-alpha.vercel.app"
+AUTHENTICATION_BACKENDS = [
+    "accounts.backends.EmailOrUsernameModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]

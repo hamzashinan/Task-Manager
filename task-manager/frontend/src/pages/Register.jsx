@@ -40,11 +40,22 @@ function Register() {
       navigate("/login");
     } catch (err) {
       console.error(err);
-      setError(
-  Object.values(err.response?.data || {})
-    .flat()
-    .join(" ") || "Registration failed"
-);
+      const backendErrors = err.response?.data;
+      if (backendErrors) {
+        const messages = Object.entries(backendErrors).flatMap(([field, value]) => {
+          if (Array.isArray(value)) return value;
+          if (typeof value === "string") return [value];
+          if (value && typeof value === "object") {
+            return Object.values(value).flatMap((item) =>
+              Array.isArray(item) ? item : [item]
+            );
+          }
+          return [field];
+        });
+        setError(messages.join(" ") || "Registration failed");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
