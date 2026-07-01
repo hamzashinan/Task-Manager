@@ -31,10 +31,11 @@ function Register() {
     setLoading(true);
     try {
       await register({
-        username: form.username,
-        email: form.email,
-        password: form.password,
-      });
+  username: form.username,
+  email: form.email,
+  password: form.password,
+  password2: form.password2,
+});
       // Redirect to login on success
       navigate("/login");
     } catch (err) {
