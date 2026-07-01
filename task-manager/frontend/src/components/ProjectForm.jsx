@@ -38,6 +38,13 @@ function ProjectForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Client-side validation
+    if (!form.name.trim()) {
+      setError("Project name is required.");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -61,7 +68,7 @@ function ProjectForm({
       const message =
         err.response?.data?.detail ||
         err.response?.data?.name?.[0] ||
-        "Failed to save project.";
+        "Registration failed. Please fill out the form correctly.";
 
       setError(message);
     } finally {
