@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import secrets
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-^e^u53c^_$j2lclcr*xyiw((v)fvb01whw(s&sw+cu^s&^9pwn"
-)
+# Prefer setting DJANGO_SECRET_KEY in the environment for production.
+_env_secret = os.getenv("DJANGO_SECRET_KEY")
+if _env_secret:
+    SECRET_KEY = _env_secret
+else:
+    # Determine debug mode from env (default True for local dev)
+    _debug_env = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
+    if _debug_env:
+        # Generate a temporary secret for local development
+        SECRET_KEY = secrets.token_urlsafe(50)
+    else:
+        raise ImproperlyConfigured(
+            "DJANGO_SECRET_KEY environment variable is required in production."
+        )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
