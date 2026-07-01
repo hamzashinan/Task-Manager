@@ -29,10 +29,11 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = os.getenv(
+_allowed = os.getenv(
     "ALLOWED_HOSTS",
-    "task-manager-lqmm.onrender.com,localhost,127.0.0.1,task-manager-backend.onrender.com"
-).split(",")
+    "task-manager-rzjc.onrender.com,task-manager-lqmm.onrender.com,.onrender.com,127.0.0.1,localhost",
+)
+ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
 
 
 # Application definition
