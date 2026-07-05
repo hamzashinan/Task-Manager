@@ -45,11 +45,12 @@ api.interceptors.response.use(
         try {
           // Request new access token using refresh token
         const response = await axios.post(
-  `${apiHost}/api/auth/refresh/`,
-  {
-    refresh: refreshToken,
-  }
-);
+ 
+    `${apiHost.replace(/\/$/, "")}/api/auth/refresh/`,
+    {
+      refresh: refreshToken,
+    }
+  );
 
           const newAccessToken = response.data.access;
           localStorage.setItem("access", newAccessToken);
