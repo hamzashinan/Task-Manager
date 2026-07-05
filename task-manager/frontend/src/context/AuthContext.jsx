@@ -20,7 +20,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (data) => {
-    await api.post("auth/register/", data);
+    // Return the promise so callers can await and catch errors
+    return api.post("auth/register/", data);
   };
 
   const logout = () => {
